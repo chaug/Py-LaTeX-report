@@ -47,7 +47,7 @@ class OutputWrapper(object):
             msg += ending
         style_func = [f for f in (style_func, self.style_func, lambda x:x)
                       if f is not None][0]
-        self._out.write(force_str(style_func(msg)))
+        self._out.write(str(style_func(msg)))
 
 
 class BaseCommand(object):

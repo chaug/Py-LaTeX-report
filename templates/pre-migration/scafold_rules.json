@@ -1,0 +1,25 @@
+[
+
+    {
+        "source"   : "scafold/report.tex",
+        "override" : true,
+        "mustache" : true,
+        "new_name" : "pre-migration-{{airline}}-{{today_Ymd}}.tex"
+    },
+
+    {
+        "source"   : "scafold/part-kpi.tex",
+        "override" : true,
+        "mustache" : true,
+        "new_name" : "part-kpi-{{kpi}}.tex",
+        "loop_on"  : [ "kpi" ]
+    },
+
+    {
+        "source"   : "user/comment.tex",
+        "override" : false,
+        "new_name" : "comment-{{kpi}}-{{network}}.tex",
+        "loop_on"  : [ "kpi", "network" ]
+    }
+
+]
