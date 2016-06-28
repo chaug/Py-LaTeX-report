@@ -14,3 +14,9 @@ def get_version(*args, **kwargs):
         sub = mapping[VERSION[3]] + str(VERSION[4])
 
     return str(main + sub)
+
+from os.path import dirname, abspath, join
+
+PYTEX_ROOT_PATH      = abspath(join(dirname(__file__),'..','..','..'))
+PYTEX_TEMPLATES_PATH = join(PYTEX_ROOT_PATH,'templates')
+PYTEX_PROJECTS_PATH  = join(PYTEX_ROOT_PATH,'src','python','pytex','projects')
