@@ -12,10 +12,6 @@ class Engine(object):
     TEMPLATES = []
 
     @classmethod
-    def create(cls, **options):
-        return cls(**options)
-
-    @classmethod
     def templates(cls):
         if cls.TEMPLATES:
             return cls.TEMPLATES
@@ -37,8 +33,12 @@ class Engine(object):
         else:
             os.mkdir(path)
 
-    def __init__(self, **options):
+    def __init__(self, command, **options):
+        self.command = command
         self.__dict__.update(options)
+
+    def log(self, *args, **pwargs):
+        self.command.log(*args, **pwargs)
 
     def validate(self, templates):
         if not (templates or self.template_list):
@@ -56,11 +56,11 @@ class Engine(object):
         return template in self.templates()
 
     def pre_run(self):
-        print "=========== PRE_RUN"
+        self.log(1,"=========== PRE_RUN")
         if self.template_list:
-            print "LIST OF:", PYTEX_TEMPLATES_PATH
-            print "\n".join([" - %s" % tpl for tpl in self.templates()])
-        print "==========="
+            self.log(0, "LIST OF: %s" % PYTEX_TEMPLATES_PATH)
+            self.log(0, "\n".join([" - %s" % tpl for tpl in self.templates()]))
+        self.log(1,"===========")
 
     def render_file(self, fromPath, toPath, filename, rule = None, env = None):
         used_rule = {
@@ -99,7 +99,7 @@ class Engine(object):
             else:
                 yield {}
 
-        overwrite = used_rule.get("overwrite")
+        overwrite = not not used_rule.get("overwrite")
         fullSrc   = os.path.join(fromPath,filename)
         fullpaths = set()
         for key in _loop(dimensions):
@@ -113,7 +113,11 @@ class Engine(object):
             dest     = os.path.join(toPath,generated) if toPath else generated
             fullDest = os.path.join(self.destination,dest)
 
+            self.log(2, "From %s / %s" % (filename,  repr(key)))
+            self.log(2, "Have to generate %s" % generated)
+
             if dest in self.exclusions or fullDest in fullpaths:
+                self.log(2, "excluded")
                 continue
 
             fullpaths.add(fullDest)
@@ -121,17 +125,20 @@ class Engine(object):
                 if overwrite:
                     os.unlink(fullDest)
                 else:
+                    self.log(2, "generation skip")
                     continue
             if used_rule.get("mustache"):
                 oio = open(fullDest,"wb")
                 iio = open(fullSrc ,"rb")
                 src = iio.read()
+                self.log(2, "Render %s to %s" % (filename, generated))
                 try:
                     oio.write(pystache.render(src,used_env))
                 finally:
                     iio.close()
                     oio.close()
             else:
+                self.log(2, "Copy %s to %s" % (filename, generated))
                 shutil.copy(fullSrc,fullDest)
         return list(fullpaths)
 
@@ -151,7 +158,7 @@ class Engine(object):
                 )
 
     def run(self, template):
-        print "SCAFOLD:", template
+        self.log(1, "SCAFOLD: %s" % template)
 
         for path in "data scafold user".split():
             fullpath = os.path.join(self.destination,path)
@@ -173,11 +180,11 @@ class Engine(object):
             with open(config) as io:
                 env0.update(json.load(io))
 
-        if "settings_todo" in env0:
+        if env0.get("settings_todo"):
             raise Exception("Can't continue without setting [{0}]".format(",".join(env0["settings_todo"].keys())))
 
         project = template.replace("-","_")
-        print "PROJECT:", project
+        self.log(1, "PROJECT: %s" % project)
         # TODO : load and run project
 
         scafold_rules = []
@@ -185,9 +192,6 @@ class Engine(object):
         if os.path.exists(scafold_rules_filename):
             with open(scafold_rules_filename) as io:
                 scafold_rules = json.load(io)
-
-        # print "RULES"
-        # print json.dumps(scafold_rules,indent=2)
 
         for rule in scafold_rules:
             source = rule["source"]

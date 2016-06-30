@@ -16,7 +16,7 @@ class Command(BaseCommand):
     )
 
     def handle(self, *labels, **options):
-        engine = Engine.create(**options)
+        engine = Engine(self, **options)
 
         if not engine.validate(labels):
             raise CommandError('Unknown error.')

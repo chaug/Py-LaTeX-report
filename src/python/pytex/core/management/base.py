@@ -65,7 +65,7 @@ class BaseCommand(object):
     args = ''
 
     def __init__(self):
-    	pass
+        self.verbosity = 1
 
     def get_version(self):
         return pytex.get_version()
@@ -112,6 +112,7 @@ class BaseCommand(object):
         parser = self.create_parser(argv[0], argv[1])
         options, args = parser.parse_args(argv[2:])
         handle_default_options(options)
+        self.verbosity = int(options.verbosity)
         try:
             self.execute(*args, **options.__dict__)
         except Exception as e:
@@ -136,6 +137,18 @@ class BaseCommand(object):
 
     def handle(self, *args, **options):
         raise NotImplementedError()
+
+    def log(self, level, msg):
+        if level <= self.verbosity:
+            (self.stdout if level < 2 else self.stderr).write(
+                {
+                    0 : "",
+                    1 : "+ INFO  + ",
+                    2 : "+ TRACE + ",
+                    3 : "+ DEBUG + ",
+                }[level]
+                + msg
+            )
 
 
 class LabelCommand(BaseCommand):
