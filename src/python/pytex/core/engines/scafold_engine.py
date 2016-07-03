@@ -214,8 +214,9 @@ class Engine(object):
             raise Exception("Invalid Project setup for {0}".format(project_name))
 
         environment = project.scafold_environment()
-        self.write_data("environment.json", environment)
+        self.write_data("project_environment.json", environment)
         env0.update(environment)
+        self.write_data("full_environment.json", env0)
 
         scafold_rules = []
         scafold_rules_filename = os.path.join(fromRoot,"scafold_rules.json")
