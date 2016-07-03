@@ -6,6 +6,7 @@ import shutil
 
 from pytex import PYTEX_TEMPLATES_PATH, PYTEX_PROJECTS_PATH
 from pytex.core.management.base import CommandError
+from pytex.utils.importlib      import import_module
 
 class Engine(object):
 
@@ -37,6 +38,10 @@ class Engine(object):
         self.command = command
         self.__dict__.update(options)
 
+    def load_project_class(self, name):
+        module = import_module('pytex.projects.%s' % name)
+        return module.Project(self)
+
     def log(self, *args, **pwargs):
         self.command.log(*args, **pwargs)
 
@@ -62,8 +67,9 @@ class Engine(object):
             self.log(0, "\n".join([" - %s" % tpl for tpl in self.templates()]))
         self.log(1,"===========")
 
-    def render_file(self, fromPath, toPath, filename, rule = None, env = None):
+    def render_file(self, fromPath, toPath, filename, rule = None, env = None, project = None):
         used_rule = {
+            "action"    : "copy",
             "overwrite" : False,
             "new_name"  : None, # Means same as template
             "loop_on"   : None,
@@ -87,9 +93,9 @@ class Engine(object):
         def _loop(dims):
             if dims:
                 remaining_dims  = dims[1:]
-                keyname, values = dims[0]
+                dimkey, values = dims[0]
                 for value in (values if isinstance(values,list) else [values] ):
-                    key = {} if value is None else { keyname : value }
+                    key = {} if value is None else { dimkey : value }
                     if remaining_dims:
                         for child_key in _loop(remaining_dims):
                             key.update(child_key)
@@ -100,11 +106,13 @@ class Engine(object):
                 yield {}
 
         overwrite = not not used_rule.get("overwrite")
+        fn_rule   =         used_rule.get("new_name")
+        action    =         used_rule.get("action") or "copy"
+
         fullSrc   = os.path.join(fromPath,filename)
         fullpaths = set()
         for key in _loop(dimensions):
-            used_env.update(key)
-            fn_rule = used_rule.get("new_name")
+            used_env["loop"] = key
             generated = pystache.render(
                 fn_rule,
                 used_env
@@ -127,40 +135,54 @@ class Engine(object):
                 else:
                     self.log(2, "generation skip")
                     continue
-            if used_rule.get("mustache"):
-                oio = open(fullDest,"wb")
-                iio = open(fullSrc ,"rb")
-                src = iio.read()
-                self.log(2, "Render %s to %s" % (filename, generated))
-                try:
-                    oio.write(pystache.render(src,used_env))
-                finally:
-                    iio.close()
-                    oio.close()
+            self.log(2, "Render with %s: %s to %s" % (action, filename, generated))
+            if action == "mustache":
+                self.render_mustache(fullSrc,fullDest, env = used_env)
+            elif action.startswith("project"):
+                method = action.partition("project.")[2]
+                if not (hasattr(project,method) and callable(getattr(project,method))):
+                    raise Exception("Project has no callable method: %s" % method)
+                getattr(project,method)(fullSrc,fullDest, env = used_env)
             else:
-                self.log(2, "Copy %s to %s" % (filename, generated))
                 shutil.copy(fullSrc,fullDest)
         return list(fullpaths)
 
-    def traverse(self, fromPath, toPath, env):
+    def render_folder(self, fromPath, toPath, **args):
         for child in os.listdir(fromPath):
             fullChild = os.path.join(fromPath,child)
             if os.path.isdir(fullChild):
                 dest = os.path.join(toPath,child) if toPath else child
                 self.safe_mkdir(os.path.join(self.destination,dest))
-                self.traverse(fullChild,dest,env)
+                self.render_folder(fullChild,dest,**args)
             elif os.path.isfile(fullChild):
                 self.render_file(
                     fromPath, toPath,
                     child,
-                    env       = env,
-                    overwrite = not toPath.startswith("user")
+                    **args
                 )
+        return os.path.join(self.destination,toPath)
+
+    def write_data(self, filename, data):
+        fullDest = os.path.join(self.destination,"data",filename)
+        with open(fullDest,"wb") as oio:
+            json.dump(data, oio
+                , indent=4
+            )
+
+    def render_mustache(self, fullSrc, fullDest, env = None):
+        oio = open(fullDest,"wb")
+        iio = open(fullSrc ,"rb")
+        src = iio.read()
+        try:
+            oio.write(pystache.render(src, env or {}))
+        finally:
+            iio.close()
+            oio.close()
 
     def run(self, template):
         self.log(1, "SCAFOLD: %s" % template)
 
-        for path in "data scafold user".split():
+        for path in "sql data scafold user".split():
             fullpath = os.path.join(self.destination,path)
             self.safe_mkdir(fullpath)
 
@@ -183,9 +205,17 @@ class Engine(object):
         if env0.get("settings_todo"):
             raise Exception("Can't continue without setting [{0}]".format(",".join(env0["settings_todo"].keys())))
 
-        project = template.replace("-","_")
-        self.log(1, "PROJECT: %s" % project)
-        # TODO : load and run project
+        sql_path = self.render_folder(os.path.join(fromRoot,"sql"), "sql", env = env0)
+
+        project_name = template.replace("-","_")
+        self.log(1, "PROJECT: %s" % project_name)
+        project = self.load_project_class(project_name)
+        if not project.setup_config(env0, sql_path):
+            raise Exception("Invalid Project setup for {0}".format(project_name))
+
+        environment = project.scafold_environment()
+        self.write_data("environment.json", environment)
+        env0.update(environment)
 
         scafold_rules = []
         scafold_rules_filename = os.path.join(fromRoot,"scafold_rules.json")
@@ -199,6 +229,7 @@ class Engine(object):
             self.render_file(
                 os.path.join(fromRoot,folder),
                 folder,filename,
-                rule = rule,
-                env  = env0
+                rule    = rule,
+                env     = env0,
+                project = project
             )

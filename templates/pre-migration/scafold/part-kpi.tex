@@ -1,14 +1,18 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Analysis of {{kpi}}}
+\chapter{Analysis of {{loop.kpi.display}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Global}
 
+\input{scafold/top10-{{loop.kpi.key}}}
+
 {{# network }}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Network: {{.}}}
+\section{Network: {{display}}}
 
-\input{scafold/comment-{{kpi}}-{{.}}}
+\input{scafold/top10-{{loop.kpi.key}}-{{key}}}
+
+\input{user/comment-{{loop.kpi.key}}-{{key}}}
 
 {{/ network }}

@@ -3,23 +3,38 @@
     {
         "source"   : "scafold/report.tex",
         "overwrite": true,
-        "mustache" : true,
-        "new_name" : "pre-migration-{{airline}}-{{today_Ymd}}.tex"
+        "action"   : "mustache",
+        "new_name" : "pre-migration-{{airline}}.tex"
     },
 
     {
         "source"   : "scafold/part-kpi.tex",
         "overwrite": true,
-        "mustache" : true,
-        "new_name" : "part-kpi-{{kpi}}.tex",
+        "action"   : "mustache",
+        "new_name" : "part-kpi-{{loop.kpi.key}}.tex",
+        "loop_on"  : [ "kpi" ]
+    },
+
+    {
+        "source"   : "scafold/top10.tex",
+        "overwrite": true,
+        "action"   : "project.top10",
+        "new_name" : "top10-{{loop.kpi.key}}-{{loop.network.key}}.tex",
+        "loop_on"  : [ "kpi", "network" ]
+    },
+    {
+        "source"   : "scafold/top10.tex",
+        "overwrite": true,
+        "action"   : "project.top10",
+        "new_name" : "top10-{{loop.kpi.key}}.tex",
         "loop_on"  : [ "kpi" ]
     },
 
     {
         "source"   : "user/comment.tex",
         "overwrite": false,
-        "mustache" : true,
-        "new_name" : "comment-{{kpi}}-{{network}}.tex",
+        "action"   : "mustache",
+        "new_name" : "comment-{{loop.kpi.key}}-{{loop.network.key}}.tex",
         "loop_on"  : [ "kpi", "network" ]
     }
 

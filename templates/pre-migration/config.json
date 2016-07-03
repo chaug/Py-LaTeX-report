@@ -1,5 +1,7 @@
 {
     "excluded_networks" : "EXCLUDED",
+    "excluded_kpis"     : null,
+
     "settings_todo" : {
         "airline" : "8X"
     }

@@ -1,0 +1,26 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% TOP 10 for
+%% - KPI     : {{loop.kpi.display}} ({{loop.kpi.key}})
+%% - Network : {{loop.network.display}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+{{# local.top10}}
+\begin{tabular}{l|l|l|r|l}
+%%%%%%%%%%%%%%%%%%% HEADER %%%%%%%%%%%%%%%%%%%
+\hline
+&
+{{# header}}
+{{.}} &
+{{/ header}} \\
+\hline
+%%%%%%%%%%%%%%%%%%% ROWS %%%%%%%%%%%%%%%%%%%
+{{# rows}}
+&
+{{FLIGHT_NUMBER}} &
+{{FLIGHT_DATE}} &
+{{KPI}} & \\
+{{/ rows}}
+%%%%%%%%%%%%%%%%%%% FOOTER %%%%%%%%%%%%%%%%%%%
+\hline
+\end{tabular}
+{{/ local.top10}}
