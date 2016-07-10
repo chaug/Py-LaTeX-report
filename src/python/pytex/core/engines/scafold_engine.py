@@ -181,6 +181,16 @@ class Engine(object):
                 , indent=4
             )
 
+    def render_sql_query(self, filename, *args, **pwargs):
+        fullpath = os.path.join(self.destination,"sql",filename)
+        if not os.path.exists(fullpath):
+            raise Exception("SQL tempalte doesn't exist {0}".format(fullpath))
+        with open(fullpath,"rb") as iio:
+            src = iio.read()
+            renderer = pystache.Renderer(search_dirs=[os.path.join(self.destination,"sql")])
+            return renderer.render(src, *args, **pwargs)
+
+
     def render_mustache(self, fullSrc, fullDest, env = None):
         oio = open(fullDest,"wb")
         iio = open(fullSrc ,"rb")

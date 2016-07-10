@@ -26,6 +26,9 @@ class BaseProject(object):
     def from_db_template(self, template_name, mapped = False, local_env = None):
         if self.engine.dummy_db:
             return self.from_dummy_db(template_name, mapped = mapped, local_env = local_env)
+
+        sql_query = self.engine.render_sql_query(template_name+".sql", local_env)
+
         raise Exception("Not yet implemented")
 
     def from_dummy_db(self, template_name, mapped = False, local_env = None):

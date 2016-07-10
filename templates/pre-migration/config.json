@@ -3,6 +3,14 @@
     "excluded_kpis"     : null,
 
     "settings_todo" : {
-        "airline" : "8X"
+        "airline" : "8X",
+        "legacy" : {
+            "phase"           : "PRD",
+            "extraction_date" : "01-Jul-2017"
+        },
+        "shadow" : {
+            "phase"           : "PRD",
+            "extraction_date" : "01-Jul-2017"
+        }
     }
 }

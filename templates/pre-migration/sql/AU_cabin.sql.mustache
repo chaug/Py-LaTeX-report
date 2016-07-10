@@ -1,0 +1,21 @@
+select
+    NETWORK,
+    CABIN_CODE,
+    BOOKING_CLASS_CODE,
+    avg(AUTHORISATION_LEVEL) as AU_{{name}}
+from
+    {{table}}
+join
+    KPI_SAT_NETWORK using ('AIRLINE_CODE','FLIGHT_NUMBER','FLIGHT_DATE')
+where
+    AIRLINE_CODE        = '{{airline}}'
+    and PHASE           = '{{env.phase}}'
+    and EXTRACTION_DATE = '{{env.extraction_date}}'
+    -- and NETWORK not in ('EXCLUDED')
+    {{# loop.network }}
+    and NETWORK         = '{{key}}'
+    {{/ loop.network }}
+group by
+    NETWORK,
+    CABIN_CODE,
+    BOOKING_CLASS_CODE

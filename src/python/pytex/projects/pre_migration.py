@@ -61,12 +61,14 @@ class Project(BaseProject):
                 for k,v in loop.items()
             )
         ))
+        if "local" in env:
+            del env["local"]
 
         kpi = loop["kpi"]
         env["local"] = {
             "top10" : {
                 "header" : ["Flight Number", "Flight Date", kpi["display"]],
-                "rows"   : self.from_db_template("get_top10_{0}".format(kpi["key"]), mapped = True, local_env = loop),
+                "rows"   : self.from_db_template("get_top10_{0}".format(kpi["key"]), mapped = True, local_env = env),
             },
         }
         self.engine.render_mustache(src,dest, env = env)
@@ -79,11 +81,20 @@ class Project(BaseProject):
                 for k,v in loop.items()
             )
         ))
+        if "local" in env:
+            del env["local"]
+
+        env["local"] = {
+            "queries" : [
+                { "name" : "LEGACY", "table" : "KPI_FACT_RMSDIF_SUBCLASS", "env" : env.get("legacy"), "last" : False, },
+                { "name" : "SHADOW", "table" : "KPI_FACT_BOOKING_CLASS"  , "env" : env.get("shadow"), "last" : True , },
+            ],
+        }
 
         network = loop["network"]["key"]
         allRows = filter(
             lambda x: x["NETWORK"] == network,
-            self.from_db_template("get_AU", mapped = True, local_env = loop)
+            self.from_db_template("get_AU", mapped = True, local_env = env)
         )
         self.log(2, "get_AU %d rows" % len(allRows))
         key = lambda x : x.get("CABIN_CODE")
