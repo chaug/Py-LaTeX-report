@@ -73,6 +73,8 @@ class Engine(object):
             "overwrite" : False,
             "new_name"  : None, # Means same as template
             "loop_on"   : None,
+            "exclude"   : None,
+            "only"      : None,
         }
         used_rule.update(rule or {})
         bn, ext  = os.path.splitext(filename)
@@ -84,11 +86,21 @@ class Engine(object):
         used_env.update(env or {})
 
         loop_on = used_rule["loop_on"] or []
+        exclude = used_rule["exclude"] or []
+        only    = used_rule["only"   ] or []
         dimensions = []
         for dim in loop_on:
             if dim not in used_env:
                 raise Exception("dimension {0} should be defined in configuration".format(dim))
             values = used_env.pop(dim)
+            if exclude:
+                exvs = exclude.pop()
+                if exvs is not None:
+                    values = filter(lambda x: x["key"] not in exvs, values)
+            if only:
+                onlys = only.pop()
+                if only is not None:
+                    values = filter(lambda x: x["key"] in onlys, values)
             dimensions.append((dim, values))
         def _loop(dims):
             if dims:

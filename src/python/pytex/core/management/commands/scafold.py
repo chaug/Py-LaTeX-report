@@ -13,6 +13,8 @@ class Command(BaseCommand):
             help='List available templates.'),
         make_option('--output', '-o', action='store', dest='output',
             help='Output folder.'),
+        make_option('--dummy-db', action='store_true', dest='dummy_db',
+            help='Use Dummy DATA.'),
     )
 
     def handle(self, *labels, **options):

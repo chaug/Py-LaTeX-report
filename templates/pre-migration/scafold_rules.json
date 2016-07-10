@@ -12,7 +12,16 @@
         "overwrite": true,
         "action"   : "mustache",
         "new_name" : "part-kpi-{{loop.kpi.key}}.tex",
-        "loop_on"  : [ "kpi" ]
+        "loop_on"  : [ "kpi" ],
+        "exclude"  : [ ["AU"] ]
+    },
+    {
+        "source"   : "scafold/part-kpi-curves.tex",
+        "overwrite": true,
+        "action"   : "mustache",
+        "new_name" : "part-kpi-{{loop.kpi.key}}.tex",
+        "loop_on"  : [ "kpi" ],
+        "only"     : [ ["AU"] ]
     },
 
     {
@@ -28,6 +37,13 @@
         "action"   : "project.top10",
         "new_name" : "top10-{{loop.kpi.key}}.tex",
         "loop_on"  : [ "kpi" ]
+    },
+    {
+        "source"   : "scafold/curves-AU.tex",
+        "overwrite": true,
+        "action"   : "project.curves_AU",
+        "new_name" : "curves-AU-{{loop.network.key}}.tex",
+        "loop_on"  : [ "network" ]
     },
 
     {
