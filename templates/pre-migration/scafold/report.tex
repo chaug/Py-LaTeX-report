@@ -1,64 +1,8 @@
-\documentclass[12pt]{report}
+\documentclass{premigration}
 
 \title{Pre-Migration report for {{airline}}}
 \author{STS}
 %\date{ {{today}} }
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%% TO BE MOVED in an STS CLASS or PACKAGE %%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\usepackage[T1]{fontenc}
-%\usepackage{verdana}
-
-%%%%%%%%%
-
-\usepackage{geometry}
-\geometry{a4paper}
-%\geometry{top=1cm, bottom=1cm, left=1cm , right=1cm}
-
-% http://ftp.oleane.net/pub/CTAN/macros/latex/contrib/fancyhdr/fancyhdr.pdf
-\usepackage{fancyhdr}
-%\usepackage{lastpage}
-\pagestyle{fancy}
-
-\fancyhead{}
-\fancyfoot{}
-
-\lhead{Pre-migration Report}
-%\rhead{\today}
-
-\cfoot{\thepage}
-
-%%%%%%%%%
-
-\usepackage{graphicx}
-
-%%%%%%%%%
-
-\usepackage[table]{xcolor}
-
-\definecolor{palette1}{HTML}{0040FF}
-\definecolor{palette2}{HTML}{8080FF}
-\definecolor{palette3}{HTML}{FF0080}
-\definecolor{palette1light}{HTML}{80A0FF}
-\definecolor{palette2light}{HTML}{B0B0FF}
-\definecolor{palette3light}{HTML}{FF80B0}
-
-\newcommand{\STScomment}[1]{
-\fcolorbox{palette3}{palette3light}{%
-\begin{minipage}{0.9\textwidth}
-#1
-\end{minipage}
-}}
-
-\newcounter{actionitem}
-\setcounter{actionitem}{0}
-\newcommand{\ACTIONITEM}[1]{%
-\addtocounter{actionitem}{1}
-AI-\theactionitem #1
-
-}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
 

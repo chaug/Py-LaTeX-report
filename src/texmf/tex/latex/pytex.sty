@@ -1,0 +1,57 @@
+%%%%% http://www.latex-project.org/guides/clsguide.pdf
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{pytex}[2016/07/01 Haug's custom LaTeX style]
+
+\DeclareOption*{%
+\PackageWarning{pytex}{Unknown option ‘\CurrentOption’}%
+}
+\ProcessOptions\relax
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage[T1]{fontenc}
+%\RequirePackage{verdana}
+
+%%%%%%%%%
+
+\RequirePackage{geometry}
+\geometry{a4paper}
+%\geometry{top=1cm, bottom=1cm, left=1cm , right=1cm}
+
+% http://ftp.oleane.net/pub/CTAN/macros/latex/contrib/fancyhdr/fancyhdr.pdf
+\RequirePackage{fancyhdr}
+%\RequirePackage{lastpage}
+
+%%%%%%%%%
+
+\RequirePackage{graphicx}
+
+%%%%%%%%%
+
+\RequirePackage[table]{xcolor}
+
+\definecolor{palette1}{HTML}{0040FF}
+\definecolor{palette2}{HTML}{8080FF}
+\definecolor{palette3}{HTML}{FF0080}
+\definecolor{palette1light}{HTML}{80FFA0}
+\definecolor{palette2light}{HTML}{B0B0FF}
+\definecolor{palette3light}{HTML}{FF80B0}
+
+\newcommand{\STScomment}[1]{
+\fcolorbox{palette3}{palette3light}{%
+\begin{minipage}{0.9\textwidth}
+#1
+\end{minipage}
+}}
+
+\newcounter{actionitem}
+\setcounter{actionitem}{0}
+\newcommand{\ACTIONITEM}[1]{%
+\addtocounter{actionitem}{1}
+AI-\theactionitem #1
+
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\endinput

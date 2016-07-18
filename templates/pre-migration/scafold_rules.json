@@ -1,6 +1,13 @@
 [
 
     {
+        "source"   : "scafold/generate.sh",
+        "overwrite": true,
+        "action"   : "mustache",
+        "new_name" : "generate-{{airline}}.sh"
+    },
+
+    {
         "source"   : "scafold/report.tex",
         "overwrite": true,
         "action"   : "mustache",

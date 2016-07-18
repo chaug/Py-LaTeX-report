@@ -4,7 +4,7 @@ import os
 import pystache
 import shutil
 
-from pytex import PYTEX_TEMPLATES_PATH, PYTEX_PROJECTS_PATH
+from pytex import PYTEX_TEMPLATES_PATH, PYTEX_PROJECTS_PATH, PYTEX_TEXMF_PATH
 from pytex.core.management.base import CommandError
 from pytex.utils.importlib      import import_module
 
@@ -210,6 +210,8 @@ class Engine(object):
 
         now = datetime.datetime.now()
         env0 = {
+            "TEXMF_PATH": PYTEX_TEXMF_PATH,
+            "ROOT_PATH" : self.destination,
             "template"  : template,
             "today_Ymd" : "{0:%Y%m%d}".format(now),
             "today"     : "{0:%d-%b-%Y}".format(now),
