@@ -14,6 +14,29 @@
 
 \RequirePackage{pytex}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand{\maketitle}{%
+{\fontsize{24}{30}\fontfamily{phv}\fontseries{b}%
+\fontshape{sl}\selectfont\color{palette1}
+\@title
+}
+
+{\fontsize{18}{20}\fontfamily{phv}\fontseries{b}%
+\fontshape{sl}\selectfont\color{palette1light}
+\@author
+}}
+
+%%%%%%%%%%%%
+
+\renewcommand{\section}{%
+\@startsection
+{section}{1}{0pt}{-1.5ex plus -1ex minus -.2ex}%
+{1ex plus .2ex}{\large\sffamily\color{palette1}}%
+}
+
+%%%%%%%%%%%%
+
 \fancyhead{}
 \fancyfoot{}
 
