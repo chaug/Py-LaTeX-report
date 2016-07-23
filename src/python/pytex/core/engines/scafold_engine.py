@@ -7,6 +7,7 @@ import shutil
 from pytex import PYTEX_TEMPLATES_PATH, PYTEX_PROJECTS_PATH, PYTEX_TEXMF_PATH
 from pytex.core.management.base import CommandError
 from pytex.utils.importlib      import import_module
+from pytex.utils.shell          import safe_mkdir
 
 class Engine(object):
 
@@ -26,16 +27,9 @@ class Engine(object):
             pass
         return cls.TEMPLATES
 
-    @staticmethod
-    def safe_mkdir(path):
-        if os.path.exists(path):
-            if not os.path.isdir(path):
-                raise CommandError("%s exists but is not a folder" % path)
-        else:
-            os.mkdir(path)
-
     def __init__(self, command, **options):
-        self.command = command
+        self.command  = command
+        self.template = None
         self.__dict__.update(options)
 
     def load_project_class(self, name):
@@ -45,27 +39,9 @@ class Engine(object):
     def log(self, *args, **pwargs):
         self.command.log(*args, **pwargs)
 
-    def validate(self, templates):
-        if not (templates or self.template_list):
-            raise CommandError('Enter at least one TEMPLATE.')
-        if not self.output:
-            raise CommandError('Mandatory --ouput')
-        self.destination = os.path.abspath(self.output)
-        parent = os.path.dirname(self.destination)
-        if not os.path.isdir(parent):
-            raise CommandError("%s doesn't exist or is not a folder" % parent)
-        self.safe_mkdir(self.destination)
-        return True
-
-    def validate_template(self, template):
-        return template in self.templates()
-
-    def pre_run(self):
-        self.log(1,"=========== PRE_RUN")
-        if self.template_list:
-            self.log(0, "LIST OF: %s" % PYTEX_TEMPLATES_PATH)
-            self.log(0, "\n".join([" - %s" % tpl for tpl in self.templates()]))
-        self.log(1,"===========")
+    def validate_template(self, template = None):
+        tmpl = template or self.template
+        return tmpl and tmpl in self.templates()
 
     def render_file(self, fromPath, toPath, filename, rule = None, env = None, project = None):
         used_rule = {
@@ -164,7 +140,7 @@ class Engine(object):
             fullChild = os.path.join(fromPath,child)
             if os.path.isdir(fullChild):
                 dest = os.path.join(toPath,child) if toPath else child
-                self.safe_mkdir(os.path.join(self.destination,dest))
+                safe_mkdir(os.path.join(self.destination,dest))
                 self.render_folder(fullChild,dest,**args)
             elif os.path.isfile(fullChild):
                 self.render_file(
@@ -206,7 +182,7 @@ class Engine(object):
 
         for path in "sql data scafold user".split():
             fullpath = os.path.join(self.destination,path)
-            self.safe_mkdir(fullpath)
+            safe_mkdir(fullpath)
 
         now = datetime.datetime.now()
         env0 = {

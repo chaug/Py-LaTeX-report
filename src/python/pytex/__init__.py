@@ -21,3 +21,5 @@ PYTEX_ROOT_PATH      = abspath(join(dirname(__file__),'..','..','..'))
 PYTEX_TEMPLATES_PATH = join(PYTEX_ROOT_PATH,'templates')
 PYTEX_PROJECTS_PATH  = join(PYTEX_ROOT_PATH,'src','python','pytex','projects')
 PYTEX_TEXMF_PATH     = join(PYTEX_ROOT_PATH,'src','texmf')
+
+PYTEX_PROJECT_SETTINGS = ".pytex-project"
