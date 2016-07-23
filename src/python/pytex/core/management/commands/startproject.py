@@ -6,5 +6,5 @@ class Command(ProjectCommand):
 
     def handle_project(self, project_folder, **options):
         engine = self.createEngine(project_folder, **options)
-
+        engine.copy_templates()
         return ""

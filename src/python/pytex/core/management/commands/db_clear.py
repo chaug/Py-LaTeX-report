@@ -5,6 +5,8 @@ class Command(RenderCommand):
     help = ("Clear Database Cache")
 
     def handle_noargs(self, **options):
-        engine = self.createEngine(**options)
+        engine  = self.createEngine(**options)
+        project = engine.createProject()
 
+        # TODO: Clear cache
         return ""

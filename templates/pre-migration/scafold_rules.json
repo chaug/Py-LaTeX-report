@@ -1,21 +1,23 @@
 [
 
     {
-        "source"   : "scafold/generate.sh",
+        "source"   : "latex/generate.sh",
+        "dest_path": ".",
         "overwrite": true,
         "action"   : "mustache",
         "new_name" : "generate-{{airline}}.sh"
     },
 
     {
-        "source"   : "scafold/report.tex",
+        "source"   : "latex/report.tex",
+        "dest_path": ".",
         "overwrite": true,
         "action"   : "mustache",
         "new_name" : "pre-migration-{{airline}}.tex"
     },
 
     {
-        "source"   : "scafold/part-kpi.tex",
+        "source"   : "latex/part-kpi.tex",
         "overwrite": true,
         "action"   : "mustache",
         "new_name" : "part-kpi-{{loop.kpi.key}}.tex",
@@ -23,7 +25,7 @@
         "exclude"  : [ ["AU"] ]
     },
     {
-        "source"   : "scafold/part-kpi-curves.tex",
+        "source"   : "latex/part-kpi-curves.tex",
         "overwrite": true,
         "action"   : "mustache",
         "new_name" : "part-kpi-{{loop.kpi.key}}.tex",
@@ -32,21 +34,21 @@
     },
 
     {
-        "source"   : "scafold/top10.tex",
+        "source"   : "latex/top10.tex",
         "overwrite": true,
         "action"   : "project.top10",
         "new_name" : "top10-{{loop.kpi.key}}-{{loop.network.key}}.tex",
         "loop_on"  : [ "kpi", "network" ]
     },
     {
-        "source"   : "scafold/top10.tex",
+        "source"   : "latex/top10.tex",
         "overwrite": true,
         "action"   : "project.top10",
         "new_name" : "top10-{{loop.kpi.key}}.tex",
         "loop_on"  : [ "kpi" ]
     },
     {
-        "source"   : "scafold/curves-AU.tex",
+        "source"   : "latex/curves-AU.tex",
         "overwrite": true,
         "action"   : "project.curves_AU",
         "new_name" : "curves-AU-{{loop.network.key}}.tex",
@@ -54,7 +56,7 @@
     },
 
     {
-        "source"   : "user/comment.tex",
+        "source"   : "latex/comment.tex",
         "overwrite": false,
         "action"   : "mustache",
         "new_name" : "comment-{{loop.kpi.key}}-{{loop.network.key}}.tex",

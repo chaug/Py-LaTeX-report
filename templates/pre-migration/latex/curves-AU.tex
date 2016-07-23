@@ -3,12 +3,11 @@
 %% - Network : {{loop.network.display}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-{{# local.curves_AU}}
+{{# local.curves_AU }}
 
 \subsection{Graphs for Cabin : {{ cabin_code }}}
 
-{{=<< >>=}}
-\includegraphics[width=10cm]{<< plot_filename >>}
-<<={{ }}=>>
+\includegraphics[width=10cm]{%
+{{ paths.relative }}}
 
-{{/ local.curves_AU}}
+{{/ local.curves_AU }}

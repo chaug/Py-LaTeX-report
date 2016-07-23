@@ -11,21 +11,21 @@ class Project(BaseProject):
         ("Prot", "Protection"),
     ]
 
-    def setup_config(self, config, sql_path):
-        if not super(Project,self).setup_config(config, sql_path):
+    def setup(self, settings):
+        if not super(Project,self).setup(settings):
             return False
 
-        self.airline = config.get("airline")
+        self.airline = settings.get("airline")
         if not self.airline:
-            raise Exception("Airline not in config")
+            raise Exception("Airline not in settings/config.json")
 
-        self.excluded_kpis     = config.get("excluded_kpis")     or []
-        self.excluded_networks = config.get("excluded_networks") or []
+        self.excluded_kpis     = settings.get("excluded_kpis")     or []
+        self.excluded_networks = settings.get("excluded_networks") or []
 
         return True
 
-    def scafold_environment(self):
-        self.log(0,"Scafold Environment")
+    def project_environment(self):
+        self.log(0,"Project Environment")
         environment = {}
 
         self.log(1,"Retrieve KPIs")
@@ -44,7 +44,7 @@ class Project(BaseProject):
                 "key"     : row[0].replace(" ","_"),
                 "display" : row[0].replace("_"," "),
             }
-            for row        in self.from_db_template("get_networks")
+            for row        in self.from_db_template("get_networks", local_env=self.settings)
             if  row[0] not in self.excluded_networks
         ]
 
@@ -103,12 +103,23 @@ class Project(BaseProject):
 
         folder, filename = os.path.split(dest)
         basename, ext    = os.path.splitext(filename)
+        def plot_filenames(cabin_code):
+            plot_basename = "{0}-{1}.png".format(basename,cabin_code)
+            plot_filename = os.path.join("images",plot_basename)
+            plot_fullpath = os.path.join(folder,plot_filename)
+            plot_relpath  = os.path.relpath(plot_fullpath, self.engine.project_document_path)
+            return {
+                "basename" : plot_basename,
+                "filename" : plot_filename,
+                "full"     : plot_fullpath,
+                "relative" : plot_relpath,
+            }
         env["local"] = {
             "curves_AU" : [
                 {
                     "cabin_code"    : cabin_code,
                     "rows"          : rows,
-                    "plot_filename" : "{0}/{1}-{2}.png".format(folder,basename,cabin_code),
+                    "paths"         : plot_filenames(cabin_code),
                     "title"         : "Network {0}, Cabin {1}".format(network,cabin_code),
                     "ylabel"        : "Authorisation Level",
                 }
@@ -129,7 +140,7 @@ class Project(BaseProject):
     ###############################################################################
     # Dummy sources
 
-    def from_dummy_db(self, template_name, mapped = False, local_env = None):
+    def query_dummy_db(self, template_name, mapped = False, local_env = None):
         if template_name == "get_networks":
             return [ ("DOMESTIC",), ("INTER",), ]
         if template_name == "get_AU":

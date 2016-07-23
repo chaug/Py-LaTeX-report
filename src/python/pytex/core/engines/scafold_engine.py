@@ -7,41 +7,71 @@ import shutil
 from pytex import PYTEX_TEMPLATES_PATH, PYTEX_PROJECTS_PATH, PYTEX_TEXMF_PATH
 from pytex.core.management.base import CommandError
 from pytex.utils.importlib      import import_module
-from pytex.utils.shell          import safe_mkdir
+from pytex.utils.shell          import safe_mkdir,safe_mkdir_p
 
 class Engine(object):
 
-    TEMPLATES = []
+    CACHE_FOLDER     = "cache"
+    DOCUMENT_FOLDER  = "document"
+    SETTINGS_FOLDER  = "settings"
+    TEMPLATES_FOLDER = "templates"
+
+    WORKING_FOLDERS  = [
+        CACHE_FOLDER,
+        DOCUMENT_FOLDER,
+        os.path.join(DOCUMENT_FOLDER, "latex", "images"),
+        SETTINGS_FOLDER,
+        TEMPLATES_FOLDER,
+    ]
+
+    AVAILABLE_TEMPLATES = []
 
     @classmethod
     def templates(cls):
-        if cls.TEMPLATES:
-            return cls.TEMPLATES
+        if cls.AVAILABLE_TEMPLATES:
+            return cls.AVAILABLE_TEMPLATES
         try:
-            cls.TEMPLATES = [
+            cls.AVAILABLE_TEMPLATES = [
                 f
                 for f in os.listdir(PYTEX_TEMPLATES_PATH)
                 if not f.startswith('_') and os.path.isdir(os.path.join(PYTEX_TEMPLATES_PATH,f))
             ]
         except OSError:
             pass
-        return cls.TEMPLATES
+        return cls.AVAILABLE_TEMPLATES
 
     def __init__(self, command, **options):
-        self.command  = command
-        self.template = None
+        self.command      = command
+        self.template     = None
+        self.project_root = None
         self.__dict__.update(options)
 
-    def load_project_class(self, name):
-        module = import_module('pytex.projects.%s' % name)
-        return module.Project(self)
+    @property
+    def     project_cache_path(self): return os.path.join(self.project_root, self.    CACHE_FOLDER)
+
+    @property
+    def  project_document_path(self): return os.path.join(self.project_root, self. DOCUMENT_FOLDER)
+
+    @property
+    def  project_settings_path(self): return os.path.join(self.project_root, self. SETTINGS_FOLDER)
+
+    @property
+    def project_templates_path(self): return os.path.join(self.project_root, self.TEMPLATES_FOLDER)
+
+    @property
+    def project_sql_templates_path(self): return os.path.join(self.project_templates_path, "sql")
+
+
+    def load_json(self, filename):
+        if filename and os.path.exists(filename):
+            with open(filename) as io:
+                return json.load(io)
 
     def log(self, *args, **pwargs):
         self.command.log(*args, **pwargs)
 
-    def validate_template(self, template = None):
-        tmpl = template or self.template
-        return tmpl and tmpl in self.templates()
+    def validate_template(self):
+        return self.template and self.template in self.templates()
 
     def render_file(self, fromPath, toPath, filename, rule = None, env = None, project = None):
         used_rule = {
@@ -107,12 +137,12 @@ class Engine(object):
             ) if fn_rule else filename
 
             dest     = os.path.join(toPath,generated) if toPath else generated
-            fullDest = os.path.join(self.destination,dest)
+            fullDest = os.path.join(self.project_root,dest)
 
             self.log(2, "From %s / %s" % (filename,  repr(key)))
             self.log(2, "Have to generate %s" % generated)
 
-            if dest in self.exclusions or fullDest in fullpaths:
+            if fullDest in fullpaths:
                 self.log(2, "excluded")
                 continue
 
@@ -140,7 +170,7 @@ class Engine(object):
             fullChild = os.path.join(fromPath,child)
             if os.path.isdir(fullChild):
                 dest = os.path.join(toPath,child) if toPath else child
-                safe_mkdir(os.path.join(self.destination,dest))
+                safe_mkdir(os.path.join(self.project_root,dest))
                 self.render_folder(fullChild,dest,**args)
             elif os.path.isfile(fullChild):
                 self.render_file(
@@ -148,24 +178,23 @@ class Engine(object):
                     child,
                     **args
                 )
-        return os.path.join(self.destination,toPath)
+        return os.path.join(self.project_root,toPath)
 
     def write_data(self, filename, data):
-        fullDest = os.path.join(self.destination,"data",filename)
+        fullDest = os.path.join(self.project_settings_path, filename)
         with open(fullDest,"wb") as oio:
             json.dump(data, oio
                 , indent=4
             )
 
     def render_sql_query(self, filename, *args, **pwargs):
-        fullpath = os.path.join(self.destination,"sql",filename)
+        fullpath = os.path.join(self.project_sql_templates_path,filename)
         if not os.path.exists(fullpath):
-            raise Exception("SQL tempalte doesn't exist {0}".format(fullpath))
+            raise Exception("SQL template doesn't exist {0}".format(fullpath))
         with open(fullpath,"rb") as iio:
             src = iio.read()
-            renderer = pystache.Renderer(search_dirs=[os.path.join(self.destination,"sql")])
+            renderer = pystache.Renderer(search_dirs=[self.project_sql_templates_path])
             return renderer.render(src, *args, **pwargs)
-
 
     def render_mustache(self, fullSrc, fullDest, env = None):
         oio = open(fullDest,"wb")
@@ -177,60 +206,82 @@ class Engine(object):
             iio.close()
             oio.close()
 
-    def run(self, template):
-        self.log(1, "SCAFOLD: %s" % template)
+    def create_project_tree(self):
+        for path in self.WORKING_FOLDERS:
+            fullpath = os.path.join(self.project_root, path)
+            safe_mkdir_p(fullpath)
 
-        for path in "sql data scafold user".split():
-            fullpath = os.path.join(self.destination,path)
-            safe_mkdir(fullpath)
+    def copy_templates(self):
+        self.log(1, "COPY TEMPLATES")
+        self.log(1, "- from %s" % self.template)
+        self.log(1, "-   to %s" % self.template)
 
+        safe_mkdir(self.project_templates_path)
+        for tmpl in [ "_common" , self.template ]:
+            self.render_folder(
+                os.path.join(PYTEX_TEMPLATES_PATH, tmpl),
+                self.TEMPLATES_FOLDER,
+                rule = {
+                    "overwrite" : True
+                }
+            )
+        self.create_project_tree()
+        settings = self.render_file(self.project_templates_path, self.SETTINGS_FOLDER, "config.json")[0]
+        env      = self.load_json(settings)
+        if env.get("settings_todo"):
+            self.log(0,"Don't forget to update : %s" % settings)
+            for key in env["settings_todo"].keys():
+                self.log(0," - {0}".format(key))
+
+    def load_mustache_environment(self):
         now = datetime.datetime.now()
-        env0 = {
-            "TEXMF_PATH": PYTEX_TEXMF_PATH,
-            "ROOT_PATH" : self.destination,
-            "template"  : template,
-            "today_Ymd" : "{0:%Y%m%d}".format(now),
-            "today"     : "{0:%d-%b-%Y}".format(now),
-            "timestamp" : "{0:%Y%m%d-%H%M%S}".format(now),
+
+        mustache_env = {
+            "TEXMF_PATH"    : PYTEX_TEXMF_PATH,
+            "PROJECT_ROOT"  : self.project_root,
+            "DOCUMENT_PATH" : self.project_document_path,
+            "template"      : self.template,
+            "today_Ymd"     : "{0:%Y%m%d}".format(now),
+            "today"         : "{0:%d-%b-%Y}".format(now),
+            "timestamp"     : "{0:%Y%m%d-%H%M%S}".format(now),
         }
 
-        fromRoot = os.path.join(PYTEX_TEMPLATES_PATH,template)
-        self.exclusions = set()
+        env = self.load_json(os.path.join(self.project_settings_path,"config.json"))
+        mustache_env.update(env or {})
 
-        config = self.render_file(fromRoot, "", "config.json")[0]
-        if config and os.path.exists(config):
-            with open(config) as io:
-                env0.update(json.load(io))
+        if mustache_env.get("settings_todo"):
+            raise Exception("Can't continue without setting [{0}]".format(",".join(mustache_env["settings_todo"].keys())))
 
-        if env0.get("settings_todo"):
-            raise Exception("Can't continue without setting [{0}]".format(",".join(env0["settings_todo"].keys())))
+        self.write_data("run_environment.json", mustache_env)
+        return mustache_env
 
-        sql_path = self.render_folder(os.path.join(fromRoot,"sql"), "sql", env = env0)
-
-        project_name = template.replace("-","_")
+    def createProject(self):
+        project_name = self.template.replace("-","_")
         self.log(1, "PROJECT: %s" % project_name)
-        project = self.load_project_class(project_name)
-        if not project.setup_config(env0, sql_path):
+
+        module   = import_module('pytex.projects.%s' % project_name)
+        project  = module.Project(self)
+        env      = self.load_mustache_environment()
+
+        if not project.setup(env):
             raise Exception("Invalid Project setup for {0}".format(project_name))
+        return project
 
-        environment = project.scafold_environment()
-        self.write_data("project_environment.json", environment)
-        env0.update(environment)
-        self.write_data("full_environment.json", env0)
+    def scafold(self, project):
+        env = project.full_env or project.load_environment()
 
-        scafold_rules = []
-        scafold_rules_filename = os.path.join(fromRoot,"scafold_rules.json")
-        if os.path.exists(scafold_rules_filename):
-            with open(scafold_rules_filename) as io:
-                scafold_rules = json.load(io)
+        scafold_rules_filename = os.path.join(self.project_templates_path, "scafold_rules.json")
+        scafold_rules = self.load_json(scafold_rules_filename) or []
 
         for rule in scafold_rules:
-            source = rule["source"]
+            source    = rule["source"]
             folder,filename = os.path.split(source)
+            dest_path = rule.get("dest_path") or folder
             self.render_file(
-                os.path.join(fromRoot,folder),
-                folder,filename,
+                os.path.join(self.project_templates_path, folder),
+                os.path.join(self.DOCUMENT_FOLDER       , dest_path),
+                filename,
                 rule    = rule,
-                env     = env0,
+                env     = env.copy(),
                 project = project
             )
