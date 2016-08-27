@@ -1,0 +1,101 @@
+\chapter{Maths}
+
+\section{Syntax}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{LaTeXsource}[Symbols]
+\begin{verbatim}
+$$ \int_1^2 X \mathrm{d} X = [ X^2 / 2]_1^2 = 3/2 $$
+$$ n! \approx \sqrt{2 \pi n} (n / e)^n $$
+\end{verbatim}
+\end{LaTeXsource}
+
+\begin{Results}
+$$ \int_1^2 X \mathrm{d} X = [ X^2 / 2]_1^2 = 3/2 $$
+$$ n! \approx \sqrt{2 \pi n} (n / e)^n $$
+\end{Results}
+
+\pagebreak
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{LaTeXsource}[Boxing]
+\begin{verbatim}
+$$
+\ln(n\,!) = n \ln(n) - n
+    +   \frac{1}{2} \ln(2 \pi n)
+    +   \sum_{k=1}^K
+        \frac{  (-1)^{k+1} B_{k+1}  }{  k (k+1) n^{k}  }
+    +   \mathcal{O}
+        \left(  \frac{1}{n^{K+1}}  \right)
+$$
+$$
+\lim_{n\to +\infty }{
+n\,!
+\over
+{\sqrt{2\pi n}}\;
+\left( \frac{n}{\rm e} \right)^n
+}=1
+$$
+\end{verbatim}
+\end{LaTeXsource}
+
+\begin{Results}
+$$
+\ln(n\,!) =
+        n \ln(n) - n
+    +   \frac{1}{2} \ln(2 \pi n)
+    +   \sum_{k=1}^K
+        \frac{ (-1)^{k+1} B_{k+1} }{ k (k+1) n^{k} }
+    +   \mathcal{O}
+        \left(
+            \frac{1}{n^{K+1}}
+        \right)
+$$
+$$
+\lim_{n\to +\infty }{
+n\,!
+\over
+{\sqrt{2\pi n}}\;\left(\frac{n}{\rm e} \right)^n
+}=1
+$$
+\end{Results}
+
+\section{Display}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{LaTeXsource}[Inline]
+\begin{verbatim}
+Mathematical expression in the text
+$\vec{\nabla} \cdot \vec{E} = \frac{\rho}{\varepsilon _{0}}$
+is possible.
+\end{verbatim}
+\end{LaTeXsource}
+
+\begin{Results}
+Mathematical expression in the text
+${\vec  {\nabla }}\cdot {\vec  {E}}={\frac  {\rho }{\varepsilon _{0}}}$
+is possible.
+\end{Results}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{LaTeXsource}[Displayed]
+\begin{verbatim}
+I can reference the equation \ref{myEquation}
+that comes hereafter:
+
+\begin{equation}\label{myEquation}
+  \oint _C \vec{E} \cdot \mathrm{d} \vec{l}  =
+- \iint _S \frac{\partial \vec{B}}{\partial{t}}
+    \cdot \mathrm{d} \vec{S}
+\end{equation}
+\end{verbatim}
+\end{LaTeXsource}
+
+\begin{Results}
+I can reference the equation \ref{myEquation} that comes hereafter.
+
+\begin{equation}\label{myEquation}
+\oint _C \vec{E} \cdot \mathrm{d} \vec{l}  =
+- \iint _S \frac{\partial \vec{B}}{\partial{t}} \cdot \mathrm{d} \vec{S}
+\end{equation}
+\end{Results}

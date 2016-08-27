@@ -1,0 +1,53 @@
+\chapter{Structuring}\label{myChapter}
+
+\begin{LaTeXsource}[Sectioning]
+\begin{verbatim}
+\chapter{Structuring}      \label{myChapter}
+\section{Sectioning}       \label{mySection}
+\subsection{Cut the Hair!} \label{mySubSection}
+
+You can get deeper
+   in the    section \ref{mySection} (page\pageref{mySection})
+or in the subsection \ref{mySubSection}.
+\end{verbatim}
+\end{LaTeXsource}
+
+\begin{Results}
+\section{Sectioning}       \label{mySection}
+\subsection{Cut the Hair!} \label{mySubSection}
+
+You can get deeper
+   in the    section \ref{mySection} (page \pageref{mySection})
+or in the subsection \ref{mySubSection}.
+\end{Results}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagebreak
+
+\section{Itemize}
+
+\begin{LaTeXsource}[Itemize]
+\begin{verbatim}
+\begin{itemize}
+\item Item 1
+\item Item 2
+\end{itemize}
+
+\begin{description}
+\item[Item 1] is a nice name
+\item[Item 2] is a nice name
+\end{description}
+\end{verbatim}
+\end{LaTeXsource}
+
+\begin{Results}
+\begin{itemize}
+\item Item 1
+\item Item 2
+\end{itemize}
+
+\begin{description}
+\item[Item 1] is a nice name
+\item[Item 2] is a nice name
+\end{description}
+\end{Results}

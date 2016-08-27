@@ -88,4 +88,10 @@ ENV/
 # Rope project settings
 .ropeproject
 
+# LaTeX
+*.aux
+*.toc
+
+doc/awareness/report.pdf
+doc/awareness/src/report.pdf
 workspace/

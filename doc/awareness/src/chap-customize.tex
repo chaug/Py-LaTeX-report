@@ -1,0 +1,74 @@
+\chapter{Customizing}
+
+\section{New commands}
+
+You can define your own commands.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{LaTeXsource}[Simple Commands]
+\begin{verbatim}
+\newcommand{\FYI}{{\bf For Your Information}}
+\newcommand{\WTF}{``What The $F\dag^2k$!''}
+
+\FYI, FYI stands for \FYI{}
+while WTF means \WTF.
+\end{verbatim}
+\end{LaTeXsource}
+
+\begin{Results}
+\newcommand{\FYI}{{\bf For Your Information}}
+\newcommand{\WTF}{``What The $F\dag^2k$!''}
+\FYI, FYI stands for \FYI{}
+while WTF means \WTF.
+\end{Results}
+
+\pagebreak
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{LaTeXsource}[(Optional) arguments]
+\begin{verbatim}
+\newcommand{\Funny}[1]{%
+    \fcolorbox{white}{palette1}{ #1 }}
+\newcommand{\Sade}[2][Unknown Reason]{%
+    \fcolorbox{white}{palette3}{ {\bf #2} (#1)} }
+
+\Funny{Warning},
+\Sade{Error},
+\Sade[Stack Overflow]{Issue}
+\end{verbatim}
+\end{LaTeXsource}
+
+\begin{Results}
+\newcommand{\Funny}[1]{\fcolorbox{white}{palette1}{#1}}
+\newcommand{\Sade}[2][Unknown Reason]{\fcolorbox{white}{palette3}{{\bf #2} (#1)}}
+
+\Funny{Warning}, \Sade{Error}, \Sade[Stack Overflow]{Issue}
+\end{Results}
+
+\pagebreak
+
+\section{Environments}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{LaTeXsource}[Environments]
+\begin{verbatim}
+\newenvironment{Results}[1][\unskip]%
+{\begin{mdframed}[style=results,frametitle={#1}]}%
+{\end{mdframed}}
+
+\begin{Results}        Without argument       \end{Results}
+\begin{Results}[]      With an empty argument \end{Results}
+\begin{Results}[Title] With a title           \end{Results}
+\end{verbatim}
+\end{LaTeXsource}
+
+\begin{Results}
+Without argument
+\end{Results}
+
+\begin{Results}[]
+With an empty argument
+\end{Results}
+
+\begin{Results}[The title]
+With a title
+\end{Results}

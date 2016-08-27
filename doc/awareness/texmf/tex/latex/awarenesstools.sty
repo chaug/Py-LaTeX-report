@@ -1,0 +1,85 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{awarenesstools}[2016/07/01 Haug's custom LaTeX style]
+
+\DeclareOption*{%
+\PackageWarning{awarenesstools}{Unknown option ‘\CurrentOption’}%
+}
+\ProcessOptions\relax
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage[T1]{fontenc}
+
+%\RequirePackage{dejavu}
+\RequirePackage[sfdefault]{merriweather}
+
+%%%%%%%%%
+
+\RequirePackage{geometry}
+\geometry{a4paper}
+%\geometry{top=1cm, bottom=1cm, left=1cm , right=1cm}
+
+% http://ftp.oleane.net/pub/CTAN/macros/latex/contrib/fancyhdr/fancyhdr.pdf
+\RequirePackage{fancyhdr}
+%\RequirePackage{lastpage}
+
+%%%%%%%%%
+
+\RequirePackage{graphicx}
+
+%%%%%%%%%
+
+\RequirePackage[table]{xcolor}
+
+\definecolor{palette1}{HTML}{0040FF}
+\definecolor{palette2}{HTML}{8080FF}
+\definecolor{palette3}{HTML}{FF0080}
+\definecolor{palette1light}{HTML}{80A0FF}
+\definecolor{palette2light}{HTML}{B0B0FF}
+\definecolor{palette3light}{HTML}{FF80B0}
+
+%%%%%%%%%
+
+\RequirePackage[framemethod=default]{mdframed}
+\RequirePackage{showexpl}
+
+\mdfdefinestyle{source}{%
+rightline=true,innerleftmargin=10,innerrightmargin=10,
+frametitlerule=true,frametitlerulecolor=palette3light,
+frametitlebackgroundcolor=palette3light!40,
+backgroundcolor=palette3light!20,
+frametitlerulewidth=2pt}
+
+\mdfdefinestyle{results}{%
+rightline=true,innerleftmargin=10,innerrightmargin=10,
+frametitlerule=true,frametitlerulecolor=palette2light,
+frametitlebackgroundcolor=palette2light!40,
+backgroundcolor=palette2light!20,
+frametitlerulewidth=2pt}
+
+\newenvironment{LaTeXsource}[1][Source]{%
+\begin{mdframed}[style=source,frametitle={#1}]
+\begin{minipage}[c]{0.7\textwidth}}{%
+\end{minipage}
+\end{mdframed}}
+
+\newenvironment{Results}[1][\unskip]%
+{\begin{mdframed}[style=results,frametitle={#1}]}%
+{\end{mdframed}}
+
+%%%%%%%%%
+
+%\RequirePackage{mathtools}
+%\RequirePackage{amsmath}
+\RequirePackage{esint}
+%\RequirePackage[charter]{mathdesign}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% tikz
+%% http://www.tug.org/pracjourn/2007-1/mertz/mertz.pdf
+
+%%%%% class and style
+%% http://www.latex-project.org/guides/clsguide.pdf
+
+\endinput

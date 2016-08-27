@@ -1,0 +1,12 @@
+
+ROOT=$(cd $(dirname $0) ; pwd)
+
+export TEXMFHOME=$ROOT/texmf
+
+pushd $ROOT
+    pushd src
+         pdflatex report
+    popd
+    [ -f report.pdf ] || ln -nfs src/report.pdf
+popd
+
