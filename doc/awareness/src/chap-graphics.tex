@@ -1,1 +1,59 @@
 \chapter{Graphics}
+
+\section{Images}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{LaTeXsource}[Graphics]
+\begin{verbatim}
+\includegraphics[width=4cm]{plane_PNG5253} $\to$
+\includegraphics[width=2cm]{plane_PNG5253} $\to$
+\includegraphics[width=2cm]{plane_PNG5254} $\to$
+\includegraphics[width=4cm]{plane_PNG5254}
+\end{verbatim}
+\end{LaTeXsource}
+
+\begin{Results}
+\includegraphics[width=4cm]{plane_PNG5253} $\to$
+\includegraphics[width=2cm]{plane_PNG5253} $\to$
+\includegraphics[width=2cm]{plane_PNG5254} $\to$
+\includegraphics[width=4cm]{plane_PNG5254}
+\end{Results}
+
+\section{Drawings}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{LaTeXsource}[Picture]
+\begin{verbatim}
+\setlength{\unitlength}{0.75mm}
+\begin{picture}(60,40)
+\put(30,20){\vector(1,0){30}}
+\put(30,20){\vector(4,1){20}}
+\put(30,20){\vector(3,1){25}}
+\put(30,20){\vector(2,1){30}}
+\put(30,20){\vector(1,2){10}}
+\thicklines
+\put(30,20){\vector(-4,1){30}}
+\put(30,20){\vector(-1,4){5}}
+\thinlines
+\put(30,20){\vector(-1,-1){5}}
+\put(30,20){\vector(-1,-4){5}}
+\end{picture}
+\end{verbatim}
+\end{LaTeXsource}
+
+\begin{Results}
+\setlength{\unitlength}{0.75mm}
+\begin{picture}(60,40)
+\put(30,20){\vector(1,0){30}}
+\put(30,20){\vector(4,1){20}}
+\put(30,20){\vector(3,1){25}}
+\put(30,20){\vector(2,1){30}}
+\put(30,20){\vector(1,2){10}}
+\thicklines
+\put(30,20){\vector(-4,1){30}}
+\put(30,20){\vector(-1,4){5}}
+\thinlines
+\put(30,20){\vector(-1,-1){5}}
+\put(30,20){\vector(-1,-4){5}}
+\end{picture}
+\end{Results}

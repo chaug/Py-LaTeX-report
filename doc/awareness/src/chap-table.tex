@@ -1,1 +1,178 @@
 \chapter{Tables}
+
+\section{Simple Tables}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{LaTeXsource}[Simple Table]
+\begin{verbatim}
+\begin{tabular}{|l|c|r|}
+  \hline
+  Column 1 & Column 2 & Column 3 \\
+  \hline
+  1.1 & 1.2 & 1.3 \\
+  2.1 & 2.2 & 2.3 \\
+  \hline
+\end{tabular}
+\end{verbatim}
+\end{LaTeXsource}
+
+\begin{Results}
+\begin{tabular}{|l|c|r|}
+  \hline
+  Column 1 & Column 2 & Column 3 \\
+  \hline
+  1.1 & 1.2 & 1.3 \\
+  2.1 & 2.2 & 2.3 \\
+  \hline
+\end{tabular}
+\end{Results}
+
+\pagebreak
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{LaTeXsource}[Floating]
+\begin{verbatim}
+\begin{table}[h]
+  \caption{\label{myTable} Table's title}
+  \centering
+  \begin{tabular}{|p{4cm}|p{4cm}|}
+    \hline
+    ...
+    \hline
+  \end{tabular}
+\end{table}
+
+See the table~\ref{myTable} on page~\pageref{myTable}.
+
+\listoftables
+\end{verbatim}
+\end{LaTeXsource}
+
+\begin{table}[h]
+  \caption{\label{myTable} Table's title}
+  \centering
+  \begin{tabular}{|p{4cm}|p{4cm}|}
+    \hline
+      A first text that should be cropped &
+      A second one \\
+    \hline
+      A third text long enough also &
+      And a fourth one that is very long,
+      at least longer than the others \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\begin{Results}
+See the table~\ref{myTable} on page~\pageref{myTable}.
+
+\listoftables
+\end{Results}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{LaTeXsource}[Merged Cells]
+\begin{verbatim}
+\begin{tabular}{|l|c|r|} 
+   \hline
+    Column 1 & \multicolumn{2}{c|}{Columns 2 \& 3} \\
+    \hline
+    1.1 & 1.2 & 1.3 \\
+    \cline{2-3} 
+        & 2.2 & 2.3 \\
+    \hline
+\end{tabular}
+\end{verbatim}
+\end{LaTeXsource}
+
+\begin{Results}
+\begin{tabular}{|l|c|r|} 
+   \hline
+    Column 1 & \multicolumn{2}{c|}{Columns 2 \& 3} \\
+    \hline
+    1.1 & 1.2 & 1.3 \\
+    \cline{2-3} 
+        & 2.2 & 2.3 \\
+    \hline
+\end{tabular}
+\end{Results}
+
+\pagebreak
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Long Tables}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{LaTeXsource}[Long Tables]
+\begin{verbatim}
+\begin{longtable}{| p{0.4\linewidth} | p{0.4\linewidth} |}
+\caption{\label{myTable2} A table on many pages}\\
+
+\hline First Header 1 & First Header 2
+(\pageref{firstLine}/\pageref{lastLine})
+\label{firstLine} \\ \hline \endfirsthead
+
+\hline       Header 1 &       Header 2
+(\pageref{firstLine}/\pageref{lastLine})
+\\ \hline \endhead
+
+\hline \multicolumn{2}{r}{See next page}
+\\ \endfoot
+
+\hline \multicolumn{2}{r}{End of Table}
+\label{lastLine} \\ \endlastfoot
+%
+Line  1 & Column 2 \\
+Line  2 & Column 2 \\
+...
+\end{longtable}
+\end{verbatim}
+\end{LaTeXsource}
+
+%\begin{Results}
+\begin{longtable}{| p{0.4\linewidth} | p{0.4\linewidth} |}
+\caption{\label{myTable2} A table on many pages}\\
+
+\hline First Header 1 & First Header 2
+(\pageref{firstLine}/\pageref{lastLine})
+\label{firstLine}
+\\ \hline \endfirsthead
+\hline       Header 1 &       Header 2
+(\pageref{firstLine}/\pageref{lastLine})
+\\ \hline \endhead
+\hline \multicolumn{2}{r}{See next page}
+\\ \endfoot
+\hline \multicolumn{2}{r}{End of Table}
+\label{lastLine}
+\\ \endlastfoot
+%%%%%%%%%%%%%%
+Line  1 & Column 2 \\
+Line  2 & Column 2 \\
+Line  3 & Column 2 \\
+Line  4 & Column 2 \\
+Line  5 & Column 2 \\
+Line  6 & Column 2 \\
+Line  7 & Column 2 \\
+Line  8 & Column 2 \\
+Line  9 & Column 2 \\
+Line 10 & Column 2 \\
+Line 11 & Column 2 \\
+Line 12 & Column 2 \\
+Line 13 & Column 2 \\
+Line 14 & Column 2 \\
+Line 15 & Column 2 \\
+Line 16 & Column 2 \\
+Line 17 & Column 2 \\
+Line 18 & Column 2 \\
+Line 19 & Column 2 \\
+Line 20 & Column 2 \\
+Line 21 & Column 2 \\
+Line 22 & Column 2 \\
+Line 23 & Column 2 \\
+Line 24 & Column 2 \\
+Line 25 & Column 2 \\
+Line 26 & Column 2 \\
+Line 27 & Column 2 \\
+Line 28 & Column 2 \\
+Line 29 & Column 2 \\
+Line 30 & Column 2 \\
+\end{longtable}
+%\end{Results}

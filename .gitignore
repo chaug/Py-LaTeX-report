@@ -91,6 +91,7 @@ ENV/
 # LaTeX
 *.aux
 *.toc
+*.lot
 
 doc/awareness/report.pdf
 doc/awareness/src/report.pdf
