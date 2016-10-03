@@ -15,9 +15,9 @@
 
 %%%%%%%%%
 
-\RequirePackage{geometry}
-\geometry{a4paper}
-%\geometry{top=1cm, bottom=1cm, left=1cm , right=1cm}
+%\RequirePackage{pdflscape}
+
+\RequirePackage[a4paper,margin=13mm,landscape]{geometry}
 
 % http://ftp.oleane.net/pub/CTAN/macros/latex/contrib/fancyhdr/fancyhdr.pdf
 \RequirePackage{fancyhdr}
@@ -37,12 +37,24 @@
 
 \RequirePackage[table]{xcolor}
 
-\definecolor{palette1}{HTML}{0040FF}
-\definecolor{palette2}{HTML}{8080FF}
-\definecolor{palette3}{HTML}{FF0080}
-\definecolor{palette1light}{HTML}{80A0FF}
-\definecolor{palette2light}{HTML}{B0B0FF}
-\definecolor{palette3light}{HTML}{FF80B0}
+\definecolor{palette1}{RGB}{0,94,184}
+\definecolor{palette2}{RGB}{0,169,224}
+\definecolor{palette3}{RGB}{206,0,88}
+\definecolor{palette4}{RGB}{229,106,84}
+\definecolor{palette1light}{RGB}{0,169,224}
+\definecolor{palette2light}{RGB}{106,209,227}
+\definecolor{palette3light}{RGB}{236,134,208}
+
+%%%%%%%%%
+
+\RequirePackage{sectsty}
+
+\allsectionsfont{\sf}
+\sectionfont{%
+\sffamily%
+\color{palette1}%
+\sectionrule{3ex}{3pt}%
+{-1.5ex}{1pt}}
 
 %%%%%%%%%
 
@@ -50,18 +62,31 @@
 \RequirePackage{showexpl}
 
 \mdfdefinestyle{source}{%
+linecolor=palette3,linewidth=3pt,
 rightline=true,innerleftmargin=10,innerrightmargin=10,
-frametitlerule=true,frametitlerulecolor=palette3light,
-frametitlebackgroundcolor=palette3light!40,
-backgroundcolor=palette3light!20,
-frametitlerulewidth=2pt}
+frametitlerule=true,frametitlerulecolor=palette3,
+frametitlebackgroundcolor=palette3!40,
+backgroundcolor=palette3!20,
+frametitlerulewidth=1pt,
+shadow=true,shadowsize=3pt}
 
 \mdfdefinestyle{results}{%
+linecolor=palette1,linewidth=3pt,
 rightline=true,innerleftmargin=10,innerrightmargin=10,
-frametitlerule=true,frametitlerulecolor=palette2light,
-frametitlebackgroundcolor=palette2light!40,
-backgroundcolor=palette2light!20,
-frametitlerulewidth=2pt}
+frametitlerule=true,frametitlerulecolor=palette1,
+frametitlebackgroundcolor=palette1!40,
+backgroundcolor=palette1!20,
+frametitlerulewidth=1pt,
+shadow=true,shadowsize=3pt}
+
+\mdfdefinestyle{references}{%
+linecolor=palette4,linewidth=3pt,
+rightline=true,innerleftmargin=10,innerrightmargin=10,
+frametitlerule=true,frametitlerulecolor=palette4,
+frametitlebackgroundcolor=palette4!40,
+backgroundcolor=palette4!20,
+frametitlerulewidth=1pt,
+shadow=true,shadowsize=3pt}
 
 \newenvironment{LaTeXsource}[1][Source]{%
 \begin{mdframed}[style=source,frametitle={#1}]
@@ -71,6 +96,10 @@ frametitlerulewidth=2pt}
 
 \newenvironment{Results}[1][\unskip]%
 {\begin{mdframed}[style=results,frametitle={#1}]}%
+{\end{mdframed}}
+
+\newenvironment{References}[1][References]%
+{\begin{mdframed}[style=references,frametitle={#1}]}%
 {\end{mdframed}}
 
 %%%%%%%%%
@@ -87,5 +116,8 @@ frametitlerulewidth=2pt}
 
 %%%%% class and style
 %% http://www.latex-project.org/guides/clsguide.pdf
+
+%%%%% mdframed
+%% http://mirror.hmc.edu/ctan/macros/latex/contrib/mdframed/mdframed.pdf
 
 \endinput

@@ -41,9 +41,9 @@
   \end{tabular}
 \end{table}
 
-See the table~\ref{myTable} on page~\pageref{myTable}.
-
 \listoftables
+
+See the table~\ref{myTable} on page~\pageref{myTable}.
 \end{verbatim}
 \end{LaTeXsource}
 
@@ -63,9 +63,9 @@ See the table~\ref{myTable} on page~\pageref{myTable}.
 \end{table}
 
 \begin{Results}
-See the table~\ref{myTable} on page~\pageref{myTable}.
-
 \listoftables
+
+See the table~\ref{myTable} on page~\pageref{myTable}.
 \end{Results}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -104,21 +104,16 @@ See the table~\ref{myTable} on page~\pageref{myTable}.
 \begin{LaTeXsource}[Long Tables]
 \begin{verbatim}
 \begin{longtable}{| p{0.4\linewidth} | p{0.4\linewidth} |}
-\caption{\label{myTable2} A table on many pages}\\
 
-\hline First Header 1 & First Header 2
-(\pageref{firstLine}/\pageref{lastLine})
-\label{firstLine} \\ \hline \endfirsthead
+\caption{\label{myTable2} A table on many pages}                                                  \\
 
-\hline       Header 1 &       Header 2
-(\pageref{firstLine}/\pageref{lastLine})
-\\ \hline \endhead
+\hline First Header 1 & First Header 2 (\pageref{firstLine}/\pageref{lastLine}) \label{firstLine} \\ \hline \endfirsthead
 
-\hline \multicolumn{2}{r}{See next page}
-\\ \endfoot
+\hline       Header 1 &       Header 2 (\pageref{firstLine}/\pageref{lastLine})                   \\ \hline \endhead
 
-\hline \multicolumn{2}{r}{End of Table}
-\label{lastLine} \\ \endlastfoot
+\hline \multicolumn{2}{r}{See next page}                                                          \\        \endfoot
+
+\hline \multicolumn{2}{r}{End of Table}                                         \label{lastLine}  \\        \endlastfoot
 %
 Line  1 & Column 2 \\
 Line  2 & Column 2 \\
@@ -176,3 +171,9 @@ Line 29 & Column 2 \\
 Line 30 & Column 2 \\
 \end{longtable}
 %\end{Results}
+
+\pagebreak
+
+\begin{References}
+http://www.latex-howto.be/files/LaTeX-HowTo-ch5.pdf
+\end{References}
