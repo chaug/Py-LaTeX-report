@@ -59,6 +59,74 @@
 \end{Results}
 
 \pagebreak
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{LaTeXsource}[Picture]
+\begin{verbatim}
+\put(0,32){\vector(1,0){256}}
+
+\newsavebox{\STEP}
+\savebox{\STEP}(56,32)[bl]{%
+\put(28, 2){\line(0,1){12}}
+\put( 0,16){\framebox(56,16)[lt]{}}
+}
+\multiput(4,24)(64,0){3}{\usebox{\STEP}}
+
+\put( 32,48){\makebox(0,0){Shadow Mode}}
+\put( 96,48){\makebox(0,0){$1^{st}$ pre-migration Report}}
+\put(160,48){\makebox(0,0){$2^{nd}$ pre-migration Report}}
+\put(224,48){\makebox(0,0){Alt\'ea RMS migration}}
+%...
+\end{verbatim}
+\end{LaTeXsource}
+
+\begin{Results}
+\setlength{\unitlength}{1.00mm}
+\begin{picture}(256,64)
+
+\thicklines
+\put(0,32){\vector(1,0){256}}
+
+\newsavebox{\STEP}
+\savebox{\STEP}(56,32)[bl]{%
+\put(28, 2){\line(0,1){12}}
+\put( 0,16){\framebox(56,16)[lt]{}}
+}
+\newsavebox{\STEPbis}
+\savebox{\STEPbis}(56,32)[bl]{%
+\put(28, 2){\line(0,1){12}}
+\put( 0,16){\dashbox(56,16)[lt]{}}
+}
+
+\multiput(4,24)(64,0){3}{\usebox{\STEP}}
+\put(196,24){\usebox{\STEPbis}}
+
+\put( 32,48){\makebox(0,0){Shadow Mode}}
+\put( 96,48){\makebox(0,0){$1^{st}$ pre-migration Report}}
+\put(160,48){\makebox(0,0){$2^{nd}$ pre-migration Report}}
+\put(224,48){\makebox(0,0){Alt\'ea RMS migration}}
+
+\put( 32,20){\makebox(0,0){19-Jul-2016}}
+\put( 96,20){\makebox(0,0){26-Aug-2016}}
+\put(160,20){\makebox(0,0){30-Sep-2016}}
+\put(224,20){\makebox(0,0){17-Oct-2016}}
+
+\put( 32, 8){\line( 1,-1){8}}
+\put( 40, 0){\line( 0, 1){4}}
+\put( 40, 4){\line( 1, 0){144}}
+\put(184, 4){\line( 0,-1){4}}
+\put(184, 0){\line( 1, 1){8}}
+\put(192, 8){\line(-1, 1){8}}
+\put(184,16){\line( 0,-1){4}}
+\put(184,12){\line(-1, 0){144}}
+\put( 40,12){\line( 0, 1){4}}
+\put( 40,16){\line(-1,-1){8}}
+\put(112,8){\makebox(0,0){Rules Setup and Calibration}}
+
+\end{picture}
+\end{Results}
+
+\pagebreak
 
 \begin{References}
 http://www.latex-howto.be/files/LaTeX-HowTo-ch4.pdf
